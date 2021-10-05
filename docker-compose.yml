@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  mariadb:
+    container_name: mariadb
+    hostname: mariadb
+    image: bitnami/mariadb:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_ROOT_USER=root
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=chat
+    volumes:
+      - ./mariadb/database:/bitnami/mariadb
+    # ports:
+    #   - 3308:3306
+    networks:
+      - app
+  api-chat:
+    image: api-chat:latest
+    container_name: api-chat
+    hostname: api-chat
+    platform: linux/amd64
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    tty: true
+    volumes:
+      - ./app/:/usr/src/app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 20m
+        max-file: "3"
+    ports:
+      - 3000:3000
+    networks:
+      - app
+    depends_on:
+      - mariadb
+
+networks:
+  app:
+    driver: bridge

@@ -1,0 +1,12 @@
+{
+    "server": {
+        "port": "3000"
+    },
+    "mysql": {
+        "host": "mariadb",
+        "user": "root",
+        "password": "root",
+        "database": "chat",
+        "port": "3306"
+    }
+}
